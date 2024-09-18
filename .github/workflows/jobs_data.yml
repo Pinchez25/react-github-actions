@@ -31,13 +31,18 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: dist-files
-                path: |
-                   dist
-                   package.json
+                path: dist
+                overwrite: true
 
     deploy:
         needs: build
         runs-on: ubuntu-latest
         steps:
-            - name: Deploy
-              run: echo "Deploying..."
+          - name: Download Artifact
+            uses: actions/download-artifact@v4
+            with:
+              name: dist-files
+          - name: Output Content
+            run: ls -alh
+          - name: Deploy
+            run: echo "Deploying..."
