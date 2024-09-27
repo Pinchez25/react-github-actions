@@ -1,4 +1,4 @@
-name: Execution Flow
+name: Continue on Error Flow
 on:
     push:
         branches: [main]
