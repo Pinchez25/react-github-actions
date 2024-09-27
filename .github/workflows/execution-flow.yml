@@ -98,5 +98,20 @@ jobs:
             - name: Deploy to server
               run: |
                 echo "Deploying to server..."
-                
+
+    report:
+        if: failure()
+        runs-on: ubuntu-latest
+        steps:
+            - name: Output Information
+              run: |
+                echo "Build completed"
+                echo "Lint completed"
+                echo "Test completed"
+                echo "Deploy completed"
+                echo "${{ toJson(github)}}"
+
+
+
+
                   
