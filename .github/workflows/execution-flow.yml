@@ -11,14 +11,16 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Cache dependencies
+              id: cache
               uses: actions/cache@v4
               with:
-                path: ~/.npm
-                key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+                path: node_modules
+                key: ${{ runner.os }}-node-modules-cache-${{ hashFiles('**/package-lock.json') }}
                 restore-keys: |
-                  ${{ runner.os }}-npm-cache-
+                  ${{ runner.os }}-node-modules-cache-
 
             - name: Install Dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
               run: npm ci
 
             - name: Lint Code
@@ -32,14 +34,16 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Cache dependencies
+              id: cache
               uses: actions/cache@v4
               with:
-                path: ~/.npm
-                key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+                path: node_modules
+                key: ${{ runner.os }}-node-modules-cache-${{ hashFiles('**/package-lock.json') }}
                 restore-keys: |
-                  ${{ runner.os }}-npm-cache-
+                  ${{ runner.os }}-node-modules-cache-
 
             - name: Install Dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
               run: npm ci
 
             - name: Test Code
@@ -61,15 +65,18 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Cache dependencies
+              id: cache
               uses: actions/cache@v4
               with:
-                path: ~/.npm
-                key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+                path: node_modules
+                key: ${{ runner.os }}-node-modules-cache-${{ hashFiles('**/package-lock.json') }}
                 restore-keys: |
-                  ${{ runner.os }}-npm-cache-
+                  ${{ runner.os }}-node-modules-cache-
 
             - name: Install Dependencies
+              if: steps.cache.outputs.cache-hit != 'true'
               run: npm ci
+
             - name: Build Site
               id: build-website
               run: |
@@ -100,7 +107,7 @@ jobs:
                 echo "Deploying to server..."
 
     report:
-        needs: [lint, test, build, deploy]
+        needs: [lint, deploy]
         if: failure()
         runs-on: ubuntu-latest
         steps:
