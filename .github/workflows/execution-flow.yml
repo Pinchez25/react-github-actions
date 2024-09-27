@@ -100,6 +100,7 @@ jobs:
                 echo "Deploying to server..."
 
     report:
+        needs: [lint, test, build, deploy]
         if: failure()
         runs-on: ubuntu-latest
         steps:
